@@ -3,7 +3,6 @@ from scipy.optimize import curve_fit
 import numpy as np
 import matplotlib.pyplot as plt
 
-# List of file names for FL1.mat to FL10.mat.
 file_names = [fr'C:\Users\Gali Markuza\OneDrive - mail.tau.ac.il\Documents\סמסטר ו\מעבדה ג\molecular flouresence\matlab part 2\RB{i}.mat' for i in range(1, 11)]
 
 
@@ -19,26 +18,20 @@ con = [10**(-4), 5*(10**(-4)), 8*(10**(-4)), 10**(-3), 2.5*(10**(-3)), 5*(10**(-
 con_array = np.array(con[::-1])
 
 for file in file_names:
-    # Load the MATLAB file.
     data = scipy.io.loadmat(file)
 
-    # Extract the variables and flatten them (if needed).
     x = data['x'].squeeze()
     Avl = data['Avl'].squeeze()
 
-    # Filter out non-finite Avl values (e.g., -inf) along with their corresponding x values.
     mask = np.isfinite(Avl)
     x = x[mask]
     Avl = Avl[mask]
 
-    # Perform a linear fit: Avl = m*x + b.
     popt, pcov = curve_fit(linear, x, Avl)
     Avl_fit = linear(x, *popt)
 
-    # Calculate the residuals.
     residuals = Avl - Avl_fit
 
-    # Create a figure with two subplots.
     plt.figure(figsize=(10, 8))
 
     # Upper subplot: Data and Linear Fit.
